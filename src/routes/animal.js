@@ -1,20 +1,57 @@
-const mongoose = require("mongoose"); // importando el componente mogoose
-const animalSchema = mongoose.Schema({
-nombre: {
-type: String,
-required: true,
-},
-edad: {
-type: Number,
-required: true,
-},
-tipo: {
-type: String,
-required: true,
-},
-fecha: {
-type: Date,
-requiered: false,
-}
+const express = require("express");
+const router = express.Router(); //manejador de rutas de express
+const animalSchema = require("../models/animal");
+//Nuevo animal
+router.post("/animals", (req, res) => {
+const animal = animalSchema(req.body);
+animal
+.save()
+.then((data) => res.json(data))//como respuesta arrojeme la data en forma json
+.catch((error) => res.json({ message: error }));
 });
-module.exports = mongoose.model("Animal", animalSchema);
+module.exports = router;
+
+router.get("/animals", (req, res) => {
+    animalSchema
+    .find()
+    .then((data) => res.json(data))//como respuesta arrojeme la data en forma json
+    .catch((error) => res.json({ message: error }));
+    });
+
+    //Consultar un animal por su id
+router.get("/animals/:id", (req, res) => {
+     const { id } = req.params;
+    animalSchema
+    .findById(id)
+    .then((data) => res.json(data))
+    .catch((error) => res.json({ message: error }));
+    });
+
+    //Modificar el nombre de un animal por su id
+router.put("/animals/:id", (req, res) => {
+     const { id } = req.params;
+     const { nombre, edad, tipo, fecha } = req.body;
+     animalSchema
+    .updateOne({ _id: id }, {
+    $set: { nombre, edad, tipo, fecha }
+     })
+    .then((data) => res.json(data))
+    .catch((error) => res.json({ message: error }));
+    });
+
+    //Eliminar un animal por su id
+
+router.delete("/animals/:id", (req, res) => {
+    const { id } = req.params;
+    animalSchema
+    .findByIdAndDelete(id)
+    .then((data) => {
+    res.json(data);
+    })
+    .catch((error) => {
+    res.json({ message: error });
+    });
+    });
+    
+    
+    
