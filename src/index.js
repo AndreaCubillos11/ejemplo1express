@@ -10,7 +10,7 @@ app.listen(port, ()  =>  {
     console.log('La aplicación se está ejecutando por el puerto'+ port )
 
 })*/
-
+const authRoutes = require("./routes/authentication");
 const parser = require("body-parser");
 const express = require('express');
 const app = express();
@@ -24,6 +24,7 @@ app.use(parser.json()); // transforma los datos a formato JSON
 app.use("/api", animalRoutes);
 app.use(express.json());
 //Conexión a la base de datos
+app.use("/api", authRoutes);
 mongoose
 .connect(process.env.MONGODB_URI)
 .then(() => console.log("Conexión exitosa"))
