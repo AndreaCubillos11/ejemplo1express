@@ -1,8 +1,11 @@
+const verifyToken = require('./validate_token');
 const express = require("express");
 const router = express.Router(); //manejador de rutas de express
+
 const animalSchema = require("../models/animal");
+const { verify } = require('jsonwebtoken');
 //Nuevo animal
-router.post("/animals", (req, res) => {
+router.post("/animals", verifyToken,  (req, res) => {
 const animal = animalSchema(req.body);
 animal
 .save()
@@ -11,7 +14,7 @@ animal
 });
 module.exports = router;
 
-router.get("/animals", (req, res) => {
+router.get("/animals",verifyToken, (req, res) => {
     animalSchema
     .find()
     .then((data) => res.json(data))//como respuesta arrojeme la data en forma json
@@ -19,13 +22,13 @@ router.get("/animals", (req, res) => {
     });
 
     //Consultar un animal por su id
-router.get("/animals/:id", (req, res) => {
+/*router.get("/animals/:id", (req, res) => {
      const { id } = req.params;
     animalSchema
     .findById(id)
     .then((data) => res.json(data))
     .catch((error) => res.json({ message: error }));
-    });
+    });*/
 
     //Modificar el nombre de un animal por su id
 router.put("/animals/:id", (req, res) => {

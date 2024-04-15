@@ -18,3 +18,4 @@ const animalSchema = mongoose.Schema({
  }
 });
 module.exports = mongoose.model("Animal", animalSchema);
+
